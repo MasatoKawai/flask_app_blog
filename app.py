@@ -33,7 +33,7 @@ class User(UserMixin, db.Model):
 
 class ScriptCheck(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    script_date = db.Column(db.DateTime, nullable=False)
+    script_date = db.Column(db.Date, nullable=False)
     script_type = db.Column(db.String(10), nullable=False)
     script_num = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime, nullable = False, default = datetime.now(pytz.timezone('Asia/Tokyo')))
