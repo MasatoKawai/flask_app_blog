@@ -14,6 +14,7 @@ import pytz
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
 app.config['SECRET_KEY'] = os.urandom(24)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 bootstrap = Bootstrap(app)
 
@@ -42,8 +43,11 @@ class ScriptCheck(db.Model):
 def load_user(user_id):
   return User.query.get(int(user_id))
 
+@login_manager.unauthorized_handler
+def unauthorized():
+    return redirect('/login')
+
 @app.route('/', methods = ['GET', 'POST'])
-@login_required
 def index():
   if request.method == 'GET':
     posts = Post.query.all()
@@ -122,7 +126,7 @@ def delete(id):
 
   return redirect('/')
 
-@app.route('/script/create', methods = ["get", "post"])
+@app.route('/script/create', methods = ["GET", "POST"])
 @login_required
 def script_create():
   if request.method == 'POST':
