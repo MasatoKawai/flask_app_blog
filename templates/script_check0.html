@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="POST">
+  <label for="">日付</label>
+  <input type="date" name = "script_date">
+  <label for="">対決タイプ</label>
+  <input type="text" name = "script_type">
+  <label for="">プレー数</label>
+  <input type="number" name = "script_num">
+  <input type="submit" value="新規登録">
+</form>
+{% endblock %}

@@ -31,6 +31,13 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(30), nullable=False, unique=True)
     password = db.Column(db.String(12))
 
+class ScriptCheck(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    script_date = db.Column(db.DateTime, nullable=False)
+    script_type = db.Column(db.String(10), nullable=False)
+    script_num = db.Column(db.Integer, nullable=False)
+    created_at = db.Column(db.DateTime, nullable = False, default = datetime.now(pytz.timezone('Asia/Tokyo')))
+
 @login_manager.user_loader
 def load_user(user_id):
   return User.query.get(int(user_id))
@@ -114,3 +121,19 @@ def delete(id):
   db.session.commit()
 
   return redirect('/')
+
+@app.route('/script/create', methods = ["get", "post"])
+@login_required
+def script_create():
+  if request.method == 'POST':
+    script_date = request.form.get('script_date')
+    script_type = request.form.get('script_type')
+    script_num = request.form.get('script_num')
+
+    scriptcheck = ScriptCheck(script_date=script_date, script_type=script_type, script_num=script_num)
+
+    db.session.add(scriptcheck)
+    db.session.commit()
+    return redirect('/')
+  else:
+    return render_template('script_check0.html')
